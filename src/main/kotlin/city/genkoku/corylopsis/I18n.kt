@@ -9,7 +9,11 @@ object I18n {
 
     internal val translations = mutableMapOf<String, Translation>()
 
-    fun getChatText(node: String, language: String = "ja_JP", replacements: Map<String, String> = mapOf()): BaseComponent {
+    fun getChatText(
+        node: String,
+        language: String = "ja_JP",
+        replacements: Map<String, String> = mapOf()
+    ): BaseComponent {
         val translation = translations.takeIf { it.containsKey(language) }?.get(language)
             ?: translations["ja_JP"]
         translation ?: throw IllegalStateException("Could not load translations of the language \"$language\"")
@@ -26,7 +30,8 @@ object I18n {
             TextComponent(text).also { component ->
                 component.color = part.color
                 if (!part.hoverText.isNullOrEmpty()) {
-                    component.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, getHoverText(part.hoverText, language, replacements))
+                    component.hoverEvent =
+                        HoverEvent(HoverEvent.Action.SHOW_TEXT, getHoverText(part.hoverText, language, replacements))
                 }
             }
         }.forEach { mappedPart ->
@@ -36,7 +41,11 @@ object I18n {
         return message
     }
 
-    fun getHoverText(node: String, language: String = "ja_JP", replacements: Map<String, String> = mapOf()): Array<BaseComponent> {
+    fun getHoverText(
+        node: String,
+        language: String = "ja_JP",
+        replacements: Map<String, String> = mapOf()
+    ): Array<BaseComponent> {
         val translation = translations.takeIf { it.containsKey(language) }?.get(language)
             ?: translations["ja_JP"]
         translation ?: throw IllegalStateException("Could not load translations of the language \"$language\"")

@@ -9,7 +9,7 @@ import kotlin.streams.asSequence
 
 object Corylopsis {
 
-fun parseTranslation(directory: Path) {
+    fun parseTranslation(directory: Path) {
         Files.list(directory).forEach {
             if (it.endsWith(".json")) {
                 val file = Files.createFile(it)
