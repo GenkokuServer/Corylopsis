@@ -23,9 +23,9 @@ object I18n {
         val message = TextComponent()
 
         chatText.map { part ->
-            val text = part.text
+            var text = part.text
             replacements.forEach { replacement ->
-                text.replace(replacement.key, replacement.value, true)
+                text = text.replace(replacement.key, replacement.value, true)
             }
             TextComponent(text).also { component ->
                 component.color = part.color
@@ -56,10 +56,11 @@ object I18n {
 
         hoverTexts.forEach { parts ->
             val message = TextComponent()
+            val isFirstline = message.text.isNullOrEmpty()
             parts.map { part ->
-                val text = part.text
+                var text = part.text
                 replacements.forEach { replacement ->
-                    text.replace(replacement.key, replacement.value, true)
+                    text = text.replace(replacement.key, replacement.value, true)
                 }
                 TextComponent(text).also { component ->
                     component.color = part.color
@@ -67,6 +68,7 @@ object I18n {
             }.forEach { mappedPart ->
                 message.addExtra(mappedPart)
             }
+            if (isFirstline) message.addExtra(TextComponent("\n"))
             lines.add(message)
         }
 
