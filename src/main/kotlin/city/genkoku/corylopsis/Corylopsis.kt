@@ -11,13 +11,12 @@ object Corylopsis {
 
     fun parseTranslation(directory: Path) {
         Files.list(directory).forEach {
-            if (it.endsWith(".json")) {
-                val file = Files.createFile(it)
-                val json = Files.newBufferedReader(file).use { reader ->
-                    reader.lines().asSequence().joinToString()
+            if (it.toString().endsWith(".json")) {
+                val json = Files.newBufferedReader(it).use { reader ->
+                    reader.lines().asSequence().joinToString(separator = "")
                 }
                 val translation = Json(JsonConfiguration.Stable).parse(Translation.serializer(), json)
-                I18n.translations.put(it.fileName.toString().replace(".json", ""), translation)
+                I18n.translations[it.fileName.toString().replace(".json", "")] = translation
             }
         }
     }
