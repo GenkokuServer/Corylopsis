@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.3.71"
     kotlin("plugin.serialization") version "1.3.71"
+    id("maven-publish")
 }
 
 group = "city.genkoku.corylopsis"
@@ -23,5 +24,23 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/GenkokuServer/Corylopsis")
+            credentials {
+                username = project.findProperty("github.user").toString()
+                password = project.findProperty("github.token").toString()
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+        }
     }
 }
