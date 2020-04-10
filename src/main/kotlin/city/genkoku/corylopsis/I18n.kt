@@ -9,6 +9,13 @@ object I18n {
 
     internal val translations = mutableMapOf<String, Translation>()
 
+    /**
+     *  チャットテキスト(1行テキスト)を取得します。
+     *  @param node 取得したいテキストのノード。
+     *  @param language 言語コード。
+     *  @param replacements 置換したいもの。
+     *  @return パース済みのTextComponent。
+     */
     fun getChatText(
         node: String,
         language: String = "ja_JP",
@@ -41,6 +48,13 @@ object I18n {
         return message
     }
 
+    /**
+     *  ホバーテキスト(複数行テキスト)を取得します。
+     *  @param node 取得したいテキストのノード。
+     *  @param language 言語コード。
+     *  @param replacements 置換したいもの。
+     *  @return パース済みのTextComponent。
+     */
     fun getHoverText(
         node: String,
         language: String = "ja_JP",

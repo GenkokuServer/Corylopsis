@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "city.genkoku.corylopsis"
+group = "city.genkoku"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -27,20 +27,29 @@ tasks {
     }
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+val javadocJar by tasks.registering(Jar::class) {
+    dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
+    archiveClassifier.set("javadoc")
+    from(tasks["javadoc"])
+}
+
 publishing {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/GenkokuServer/Corylopsis")
-            credentials {
-                username = project.findProperty("github.user").toString()
-                password = project.findProperty("github.token").toString()
-            }
+            url = uri(project.findProperty("maven.publishing.repository").toString())
         }
     }
     publications {
-        create<MavenPublication>("gpr") {
+        create<MavenPublication>("local") {
             from(components["java"])
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
         }
     }
 }

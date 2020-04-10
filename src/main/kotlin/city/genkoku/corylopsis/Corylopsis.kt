@@ -9,6 +9,10 @@ import kotlin.streams.asSequence
 
 object Corylopsis {
 
+    /**
+     *  ディレクトリごと翻訳ファイルをパースします。
+     *  @param directory 対象ディレクトリ。
+     */
     fun parseTranslation(directory: Path) {
         Files.list(directory).forEach {
             if (it.toString().endsWith(".json")) {
