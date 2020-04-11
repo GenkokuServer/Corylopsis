@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Translation(
-    val chats: Map<String, List<TextPart>>,
-    @SerialName("hovertexts") val hoverTexts: Map<String, List<List<TextPart>>>
+    val language: String,
+    val chats: MutableMap<String, List<TextPart>>,
+    @SerialName("hovertexts") val hoverTexts: MutableMap<String, List<List<TextPart>>>
 )

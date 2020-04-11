@@ -10,17 +10,27 @@ import kotlin.streams.asSequence
 object Corylopsis {
 
     /**
-     *  ディレクトリごと翻訳ファイルをパースします。
-     *  @param directory 対象ディレクトリ。
+     *  翻訳ファイルをパースします。
+     *  @param path 対象ファイルへのパス もしくは、対象ファイルが含まれたディレクトリ。
      */
-    fun parseTranslation(directory: Path) {
-        Files.list(directory).forEach {
+    fun parseTranslation(path: Path) {
+        if (Files.isDirectory(path)) {
+            Files.walk(path, 2).asSequence()
+        } else {
+            sequenceOf(path)
+        }.forEach {
             if (it.toString().endsWith(".json")) {
                 val json = Files.newBufferedReader(it).use { reader ->
                     reader.lines().asSequence().joinToString(separator = "")
                 }
-                val translation = Json(JsonConfiguration.Stable).parse(Translation.serializer(), json)
-                I18n.translations[it.fileName.toString().replace(".json", "")] = translation
+                val parsedTranslation = Json(JsonConfiguration.Stable).parse(Translation.serializer(), json)
+                if (I18n.translations.containsKey(parsedTranslation.language)) {
+                    val translation = I18n.translations[parsedTranslation.language]
+                    translation?.chats?.putAll(parsedTranslation.chats)
+                    translation?.hoverTexts?.putAll(parsedTranslation.hoverTexts)
+                } else {
+                    I18n.translations[parsedTranslation.language] = parsedTranslation
+                }
             }
         }
     }
